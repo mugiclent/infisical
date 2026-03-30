@@ -1,0 +1,34 @@
+services:
+  infisical:
+    container_name: infisical
+    image: infisical/infisical:latest-postgres
+    restart: unless-stopped
+    pull_policy: always
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    networks:
+      - katisha-net
+    depends_on:
+      - infisical-db-migration
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Runs DB migrations before the main service starts.
+  # Exits after migrations complete — not a long-running service.
+  infisical-db-migration:
+    container_name: infisical-db-migration
+    image: infisical/infisical:latest-postgres
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    command: npm run migration:latest
+    networks:
+      - katisha-net
+
+networks:
+  katisha-net:
+    external: true

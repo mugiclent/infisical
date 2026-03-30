@@ -1,0 +1,5 @@
+# Local env file — values come from GitHub Actions secrets in production
+.env
+
+# GitHub Actions secrets — never commit filled values
+actions.env
