@@ -63,11 +63,11 @@ jobs:
 
             # Wait for healthy status
             echo "Waiting for infisical to be healthy..."
-            for i in $(seq 1 30); do
+            for i in $(seq 1 60); do
               STATUS=$(docker inspect --format='{{.State.Health.Status}}' infisical 2>/dev/null || echo "missing")
               [ "$STATUS" = "healthy" ] && break
-              [ $i -eq 30 ] && echo "Timed out waiting for infisical" && exit 1
-              sleep 3
+              [ $i -eq 60 ] && echo "Timed out waiting for infisical" && exit 1
+              sleep 5
             done
 
             echo "Infisical is up."
