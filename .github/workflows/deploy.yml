@@ -47,17 +47,6 @@ jobs:
             SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
             ENVEOF
 
-            # Ensure the infisical postgres user and database exist on the shared db.
-            # Each command is idempotent — safe to run on every deploy.
-            docker exec db psql -U bikaze -d katisha-db \
-              -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'infisical') THEN CREATE USER infisical WITH PASSWORD '${{ secrets.INFISICAL_DB_PASSWORD }}'; ELSE ALTER USER infisical WITH PASSWORD '${{ secrets.INFISICAL_DB_PASSWORD }}'; END IF; END \$\$;"
-            docker exec db psql -U bikaze -d postgres -tc \
-              "SELECT 1 FROM pg_database WHERE datname = 'infisical'" \
-              | grep -q 1 || docker exec db psql -U bikaze -d postgres \
-              -c "CREATE DATABASE infisical OWNER infisical;"
-            docker exec db psql -U bikaze -d postgres \
-              -c "GRANT ALL PRIVILEGES ON DATABASE infisical TO infisical;"
-
             # Start infisical (runs migrations first via infisical-db-migration)
             docker compose up -d --pull always
 
