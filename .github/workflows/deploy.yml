@@ -35,7 +35,7 @@ jobs:
             cat > .env <<ENVEOF
             ENCRYPTION_KEY=${{ secrets.INFISICAL_ENCRYPTION_KEY }}
             AUTH_SECRET=${{ secrets.INFISICAL_AUTH_SECRET }}
-            DB_CONNECTION_URI=postgres://infisical:${{ secrets.INFISICAL_DB_PASSWORD }}@db:5432/infisical
+            DB_CONNECTION_URI=postgres://infisical:${{ secrets.INFISICAL_DB_PASSWORD }}@pgbouncer:6432/infisical?prepared_statements=false
             REDIS_URL=redis://:${{ secrets.REDIS_PASSWORD }}@redis:6379
             SITE_URL=https://vault.katisha.online
             NODE_ENV=production

@@ -24,6 +24,11 @@ The `infisical` postgres user and database are provisioned by the **db service**
 (`db/init/03-infisical.sql`), not by this pipeline. The db service must be
 deployed before this service.
 
+Database connections go through **pgbouncer** (`pgbouncer:6432` on `katisha-net`)
+in transaction mode. `?prepared_statements=false` is appended to the connection
+URI so Knex.js sends raw parameterised queries instead of named prepared statements,
+which are incompatible with transaction-mode pooling.
+
 ---
 
 ## Repository layout
